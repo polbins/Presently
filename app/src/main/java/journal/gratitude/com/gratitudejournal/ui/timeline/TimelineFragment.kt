@@ -23,9 +23,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.crashlytics.android.Crashlytics
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.android.support.DaggerFragment
 import journal.gratitude.com.gratitudejournal.R
 import journal.gratitude.com.gratitudejournal.databinding.TimelineFragmentBinding
@@ -259,12 +259,12 @@ class TimelineFragment : DaggerFragment() {
                             if (inputStream != null) {
                                 importFromCsv(inputStream)
                             } else {
-                                Crashlytics.logException(NullPointerException("inputStream is null, uri: $uri"))
+                                FirebaseCrashlytics.getInstance().recordException(NullPointerException("inputStream is null, uri: $uri"))
                                 Toast.makeText(context, R.string.error_parsing, Toast.LENGTH_SHORT).show()
                             }
                         }
                     } else {
-                        Crashlytics.log("URI was null when receiving file")
+                        FirebaseCrashlytics.getInstance().log("URI was null when receiving file")
                         Toast.makeText(context, R.string.file_not_csv, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -280,7 +280,7 @@ class TimelineFragment : DaggerFragment() {
             firebaseAnalytics.logEvent(IMPORTED_DATA_SUCCESS, null)
         } catch (exception: Exception) {
             firebaseAnalytics.logEvent(IMPORTING_BACKUP_ERROR, null)
-            Crashlytics.logException(exception)
+            FirebaseCrashlytics.getInstance().recordException(exception)
 
             Toast.makeText(context, R.string.error_parsing, Toast.LENGTH_SHORT).show()
         }
@@ -319,7 +319,7 @@ class TimelineFragment : DaggerFragment() {
         try {
             startActivityForResult(Intent.createChooser(intent, "Select"), IMPORT_CSV)
         } catch (ex: ActivityNotFoundException) {
-            Crashlytics.logException(ex)
+            FirebaseCrashlytics.getInstance().recordException(ex)
             Toast.makeText(context, R.string.no_app_found, Toast.LENGTH_SHORT).show()
         }
     }
@@ -334,7 +334,7 @@ class TimelineFragment : DaggerFragment() {
         try {
             startActivity(intent)
         } catch (activityNotFoundException: ActivityNotFoundException) {
-            Crashlytics.logException(activityNotFoundException)
+            FirebaseCrashlytics.getInstance().recordException(activityNotFoundException)
             Toast.makeText(context, R.string.no_app_found, Toast.LENGTH_SHORT).show()
         }
     }
@@ -364,7 +364,7 @@ class TimelineFragment : DaggerFragment() {
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         startActivity(intent)
                     } catch (e: ActivityNotFoundException) {
-                        Crashlytics.logException(e)
+                        FirebaseCrashlytics.getInstance().recordException(e)
                         Toast.makeText(context, R.string.no_app_found, Toast.LENGTH_SHORT).show()
                     }
                 }.show()

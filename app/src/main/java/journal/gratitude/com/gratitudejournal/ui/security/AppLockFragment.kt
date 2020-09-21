@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
-import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import journal.gratitude.com.gratitudejournal.R
 import journal.gratitude.com.gratitudejournal.model.BIOMETRICS_CANCELLED
 import journal.gratitude.com.gratitudejournal.model.BIOMETRICS_LOCKOUT
@@ -75,7 +75,7 @@ class AppLockFragment : Fragment() {
                             // blocks the user from authenticating until other means of authentication is used successfully.
                             BiometricConstants.ERROR_LOCKOUT_PERMANENT -> {
                                 Toast.makeText(context, "Too many failed attempts.", Toast.LENGTH_SHORT).show()
-                                Crashlytics.logException(Exception("Permanent Lockout occurred"))
+                                FirebaseCrashlytics.getInstance().recordException(Exception("Permanent Lockout occurred"))
                                 requireActivity().finish()
                             }
                             BiometricConstants.ERROR_CANCELED -> {
@@ -85,7 +85,7 @@ class AppLockFragment : Fragment() {
                             }
                             BiometricConstants.ERROR_NO_BIOMETRICS,
                             BiometricConstants.ERROR_NO_DEVICE_CREDENTIAL -> {
-                                Crashlytics.logException(Exception(errString.toString()))
+                                FirebaseCrashlytics.getInstance().recordException(Exception(errString.toString()))
                                 //no finger print is setup
                                 Toast.makeText(
                                         context,
@@ -94,7 +94,7 @@ class AppLockFragment : Fragment() {
                                 requireActivity().finish()
                             }
                             else -> {
-                                Crashlytics.logException(Exception("Code: $errorCode: $errString"))
+                                FirebaseCrashlytics.getInstance().recordException(Exception("Code: $errorCode: $errString"))
                                 Toast.makeText(
                                         context,
                                         "Authentication error code $errorCode", Toast.LENGTH_SHORT

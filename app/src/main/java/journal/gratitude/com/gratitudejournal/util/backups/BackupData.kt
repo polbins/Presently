@@ -1,7 +1,7 @@
 package journal.gratitude.com.gratitudejournal.util.backups
 
 import android.os.Environment
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import journal.gratitude.com.gratitudejournal.model.Entry
 import journal.gratitude.com.gratitudejournal.model.TimelineItem
 import journal.gratitude.com.gratitudejournal.util.toDatabaseString
@@ -43,7 +43,7 @@ fun exportDB(timelineItems: List<TimelineItem>, exportCallback: ExportCallback) 
         csvWrite.close()
         exportCallback.onSuccess(file)
     } catch (exception: Exception) {
-        Crashlytics.logException(exception)
+        FirebaseCrashlytics.getInstance().recordException(exception)
         exportCallback.onFailure(exception.message ?: "Unknown error")
     }
 }

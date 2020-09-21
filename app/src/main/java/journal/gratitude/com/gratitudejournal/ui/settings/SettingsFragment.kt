@@ -12,9 +12,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.crashlytics.android.Crashlytics
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import journal.gratitude.com.gratitudejournal.BuildConfig
 import journal.gratitude.com.gratitudejournal.R
 import journal.gratitude.com.gratitudejournal.model.*
@@ -158,7 +158,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
             startActivity(browserIntent)
         } catch (activityNotFoundException: ActivityNotFoundException) {
             Toast.makeText(context, R.string.no_app_found, Toast.LENGTH_SHORT).show()
-            Crashlytics.logException(activityNotFoundException)
+            FirebaseCrashlytics.getInstance().recordException(activityNotFoundException)
         }
     }
 
@@ -174,7 +174,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
             startActivity(browserIntent)
         } catch (activityNotFoundException: ActivityNotFoundException) {
             Toast.makeText(context, R.string.no_app_found, Toast.LENGTH_SHORT).show()
-            Crashlytics.logException(activityNotFoundException)
+            FirebaseCrashlytics.getInstance().recordException(activityNotFoundException)
         }
     }
 
@@ -190,7 +190,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
             startActivity(browserIntent)
         } catch (activityNotFoundException: ActivityNotFoundException) {
             Toast.makeText(context, R.string.no_app_found, Toast.LENGTH_SHORT).show()
-            Crashlytics.logException(activityNotFoundException)
+            FirebaseCrashlytics.getInstance().recordException(activityNotFoundException)
         }
     }
 }
